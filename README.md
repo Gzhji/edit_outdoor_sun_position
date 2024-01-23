@@ -5,6 +5,7 @@ This respository describes the process for editing the outdoor sun in the captur
 # Remove the Sun 
 
 Use the sun theta (azi) and phi (alt) angle from [source](https://www.suncalc.org/#/27.6936,-97.5195,3/2024.01.23/16:05/1/3) and Building Orientaion measured from the room. 
+
 run command *python new_sun2circle.py --theta 194.87 --phi 40.31 --building_ori 264*
 
 
