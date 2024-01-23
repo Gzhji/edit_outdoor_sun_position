@@ -8,8 +8,7 @@ Use the sun theta (azi) and phi (alt) angle from [source](https://www.suncalc.or
 
 run command: *python new_sun2circle.py --theta 194.87 --phi 40.31 --building_ori 264*
 
-<img src="sun_mask.png" width="200" height="200"/>
-<img src="IMG_0067.JPG" width="200" height="200"/>
+<img src="sun_mask.png" width="200" height="200"/><img src="IMG_0067.JPG" width="200" height="200"/>
 The generated mask will be paired with original image to inpainting the sun and nearby region.
 
 
