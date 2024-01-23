@@ -69,6 +69,7 @@ def main():
     parser.add_argument('--adj_ang', type=float, default=-5, help='Adjustment angle')
     parser.add_argument('--theta', type=float, default=194.07, help='Theta value of the sun')
     parser.add_argument('--phi', type=float, default=40.31, help='Phi value of the sun')
+    parser.add_argument('--building_ori', type=float, default=264, help='building orientation to North')
 
     args = parser.parse_args()
     return args
@@ -92,7 +93,7 @@ if __name__ == '__main__':
     circle = gaussian_circle(center, radius, sigma)
     circle = Resize(circle, center[0], center[1])
     circle = cv.circle(circle, (center[0]//2, center[1]//2), radius//30, 255, -1)
-    cv.imwrite('gaussian circle.png', circle)
+    cv.imwrite('gaussian_circle.png', circle)
 
     h = canvas_h
     w = canvas_w
@@ -105,12 +106,12 @@ if __name__ == '__main__':
     adj_ang = args.adj_ang
     theta = args.theta
     phi = args.phi
-    building_orient = 264 + adj_ang
+    building_orient = args.building_ori + adj_ang
 
     x_theta, y_phi = Spher2Equ(theta, phi, building_orient)
     dx = w // 2 - x_theta / (math.pi) * w // 2
     dy = h // 2 - y_phi / (math.pi / 2) * h // 2
-    print('dx, dy:', dx, dy)
+    # print('dx, dy:', dx, dy)
 
 
     """
@@ -120,7 +121,7 @@ if __name__ == '__main__':
     rect_img_ = canvas.copy()
     outlined = Draw_Cir(rect_img_, (int(dx), int(dy)), radius=150, color=(255, 255, 255), thickness=-1)
     outlined = Equ2Square(outlined)
-    cv.imwrite(export_path + 'sun_mask2.png', outlined)
+    cv.imwrite('sun_mask.png', outlined)
 
 
     """
@@ -129,5 +130,5 @@ if __name__ == '__main__':
     canvas[int(dy)-center[0]//2:int(dy)+center[0]//2,
            int(dx)-center[1]//2:int(dx)+center[0]//2] = circle
 
-    print('int(dx)-center[1]//2, int(dx)+center[0]//2:', int(dx)-center[1]//2, int(dx)+center[0]//2)
-    cv.imwrite(export_path + 'sun_mask2canvas.png', canvas)
+    # print('int(dx)-center[1]//2, int(dx)+center[0]//2:', int(dx)-center[1]//2, int(dx)+center[0]//2)
+    cv.imwrite('sun2canvas.png', canvas)
