@@ -8,7 +8,8 @@ Use the sun theta (azi) and phi (alt) angle from [source](https://www.suncalc.or
 
 run command: *python new_sun2circle.py --theta 194.87 --phi 40.31 --building_ori 264*
 
-![sunmask image](sun_mask.png)
+
+<img src="sun_mask.png" width="200" height="200"/>
 
 
 
