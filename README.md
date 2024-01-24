@@ -25,3 +25,18 @@ run command: *python new_sun2hdr.py --sun_mask_path $sun_mask_path$ --input_hdr 
 # Generate the Sky
 
 run command: *python new_sky.py* to generate new sky
+
+
+# Convert between Fisheye and Equirectanglar Image
+
+run command: *python equ2sphere.py --task f2e --single_img_path $single_img_path$* to convert fisheye to equirectanglar image, or replace *f2e* to convert equirectanglar image to fisheye image.
+
+
+
+
+
+
+
+
+
+
