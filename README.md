@@ -1,4 +1,3 @@
-# edit_outdoor_sun_position
 This respository describes the process for editing the outdoor sun in the captured fisheye image
 
 
