@@ -22,6 +22,6 @@ The generated mask *'sun2canvas.png'* shows the sun position (assuming when the 
 run command: *python new_sun2hdr.py --sun_mask_path $sun_mask_path$ --input_hdr $input_hdr$ --output_hdr $output_hdr$*
 
 
-#Translate the Sky
+# Translate the Sky
 
 run command: *python new_sky.py* to generate new sky
