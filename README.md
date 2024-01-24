@@ -3,7 +3,7 @@ This respository describes the process for editing the outdoor sun in the captur
 
 # 00: Convert between Fisheye and Equirectanglar Image
 
-run command: *python equ2sphere.py --task f2e --single_img_path $single_img_path$* to convert fisheye to equirectanglar image, or replace *f2e* to convert equirectanglar image to fisheye image.
+run command: *python equ2sphere.py --task f2e --single_img_path $single_img_path$* to convert fisheye to equirectanglar image, or replace *f2e* with *e2f* to convert equirectanglar image to fisheye image.
 
 
 # 01: Remove the Sun 
