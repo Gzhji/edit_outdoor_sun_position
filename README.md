@@ -31,6 +31,8 @@ run command: *python new_sun2hdr.py --sun_mask_path $sun_mask_path$ --input_hdr 
 run command: *python new_sky.py* to generate new sky
 
 
+*sky_ground.xml* is the file used for rendering panoramic full-spectral sky. (Currently only Mitsuba 0.5 can render the full spectral sky)
+
 
 
 
