@@ -9,7 +9,7 @@ run command: *python equ2sphere.py --task f2e --single_img_path $single_img_path
 
 # 01: Remove the Sun 
 
-Use the sun theta (azi) and phi (alt) angle from [local Sun Position](https://www.suncalc.org/#/27.6936,-97.5195,3/2024.01.23/16:05/1/3) and Building Orientaion measured from the room. 
+Use the sun theta (azi) and phi (alt) angle from [Local Sun Position](https://www.suncalc.org/#/27.6936,-97.5195,3/2024.01.23/16:05/1/3) and Building Orientaion measured from the room. 
 
 run command: *python new_sun2circle.py --theta 194.87 --phi 40.31 --building_ori 264*
 
