@@ -24,4 +24,4 @@ run command: *python new_sun2hdr.py --sun_mask_path $sun_mask_path$ --input_hdr 
 
 #Translate the Sky
 
-run command: *python new_sun2hdr.py --sun_mask_path $sun_mask_path$ --input_hdr $input_hdr$ --output_hdr $output_hdr$*
+run command: *python new_sky.py* to generate new sky
