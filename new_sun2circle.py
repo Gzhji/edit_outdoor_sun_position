@@ -66,7 +66,7 @@ def main():
     parser.add_argument('--sigma', type=int, default=25, help='Standard deviation for Gaussian function')
 
     # Additional parameters
-    parser.add_argument('--adj_ang', type=float, default=-5, help='Adjustment angle')
+    parser.add_argument('--adj_ang', type=float, default=0, help='Adjustment angle')
     parser.add_argument('--theta', type=float, default=194.07, help='Theta value of the sun')
     parser.add_argument('--phi', type=float, default=40.31, help='Phi value of the sun')
     parser.add_argument('--building_ori', type=float, default=264, help='building orientation to North')

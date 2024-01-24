@@ -136,8 +136,8 @@ def main():
 
     # Paths
     parser.add_argument('--ldr_set_path', type=str, default='ldr_set/captured_equ/', help='Path to the LDR set directory')
-    parser.add_argument('--new_img_path', type=str, default='ldr_set/generated/', help='Path to save new images')
-    parser.add_argument('--lama_img_path', type=str, default='lama_new_sky/', help='Path for LAMA processed images')
+    # parser.add_argument('--new_img_path', type=str, default='ldr_set/generated/', help='Path to save new images')
+    # parser.add_argument('--lama_img_path', type=str, default='lama_new_sky/', help='Path for LAMA processed images')
     parser.add_argument('--input_sky_area', type=str, default='input/coda334_202307061254_sky_region.png', help='Input sky area image path')
     parser.add_argument('--input_sky_path', type=str, default='../sky_color/time/coda334_20230706_t=8/coda334_20230706_1057_ab_02_02_02_t=8.png', help='Input sky path')
     parser.add_argument('--targt_sky_path', type=str, default='../sky_color/time/coda334_20230706_t=8/coda334_20230706_0857_ab_02_02_02_t=8.png', help='Target sky path')

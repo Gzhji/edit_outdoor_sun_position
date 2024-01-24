@@ -166,7 +166,6 @@ def imfish2equ(imgF, tkey, fov=180, roll=0, tilt=0, pan=0, w_ratio = 2):
 
     If[idne, :] = Ie[idnf, :]
     imgE = If.reshape(he, we, ch)
-
     return imgE
 
 
@@ -191,27 +190,23 @@ def Square2Equrec(img):
 
 def Crop_Cube(img):
     cols, rows = img.shape[:2]
-    # print('cols:', cols, 'rows:', rows)
-
     midx = cols // 2
     midy = rows // 2
-    # mid_pt = np.array((midx, midy))
-    # print('mid pt is:', mid_pt)
 
     scale_ratio = rows / 36
-    targt_ridus = int(11.6 * scale_ratio)
-    # print('targt_ridus is:', targt_ridus)
+    targt_ridus = int(11.6 * scale_ratio) #the number 11.6 is only for cropping fisheye in Cannon 6D sensor dimension
 
-    final_img = img[midx - targt_ridus: midx + targt_ridus, midy - targt_ridus:midy + targt_ridus, :]
-    return final_img
+    return img[midx - targt_ridus: midx + targt_ridus, midy - targt_ridus:midy + targt_ridus, :]
+
 
 def main():
     parser = argparse.ArgumentParser(description='Process some inputs.')
-    parser.add_argument('--task', type=str, default='e2f_batch', help='Path to the sun mask image')
-    parser.add_argument('--fish_img_path', type=str, default='single_img_path', help='process a single img')
-    parser.add_argument('--pano_img_path', type=str, default='single_img_path', help='process a single img')
-    parser.add_argument('--input_folder', type=str, default='input_folder_path', help='process a folder of img')
-    parser.add_argument('--output_folder', type=str, default='output_folder_path', help='save a folder of img')
+    parser.add_argument('--task', type=str, default='e2f_batch', choices=['e2f', 'f2e', 'f2e_batch', 'e2f_batch', 'e2f_global'],
+                        help='Path to the sun mask image')
+    parser.add_argument('--single_img_path', type=str, default='single_img_path', help='single fisheye image')
+    parser.add_argument('--pano_img_path', type=str, default='single_img_path', help='single panoramic image')
+    parser.add_argument('--input_folder', type=str, default='input_folder_path', help='input image set')
+    parser.add_argument('--output_folder', type=str, default='output_folder_path', help='output image set')
     args = parser.parse_args()
     return args
 
@@ -221,31 +216,24 @@ if __name__ == '__main__':
     """
     00: import the files
     """
-    task = 'e2f_batch'
-
-    if task == 'e2f':
-        imgE = cv2.imread(args.fish_img_path)
+    if args.task == 'e2f':
+        imgE = cv2.imread(args.single_img_path)
         h,w = imgE.shape[:2]
         canvas = np.zeros((h, w, 3), dtype=np.float32)
         imgE = imgE[0:h, int(0.25*w): int(0.75*w)]
         canvas[0:h, int(0.25*w): int(0.75*w)] = imgE
-        # cv2.imwrite('m_equ.png', canvas)
-
         img_r = imequ2fish(canvas, tkey = 0, fov=180, roll=0, tilt=0, pan=0, w_ratio = 2)
         cv2.imwrite('equ2fish.png', img_r)
 
-        # img_e = imfish2equ(img_r, tkey = 0, fov=180, roll=0, tilt=0, pan=0, w_ratio = 2)
-        # cv2.imwrite('m_fish2equ.png', img_e)
-
-    if task == 'f2e':
-        img = cv2.imread(args.fish_img_path, -1)
+    if args.task == 'f2e':
+        img = cv2.imread(args.single_img_path, -1)
         img_e = imfish2equ(img, tkey = 0, fov=180, roll=0, tilt=0, pan=0, w_ratio = 2)
         h,w = img_e.shape[:2]
         img_e_c = img_e[0:h, int(0.25*w): int(0.75*w)]
         cv2.imwrite('fish2equ.png', img_e_c)
 
 
-    if task == 'f2e_batch':
+    if args.task == 'f2e_batch':
         ldr_set_path = args.input_folder
         new_img_path = args.output_folder
         filename_list = [a for a in os.listdir(ldr_set_path)]
@@ -261,7 +249,7 @@ if __name__ == '__main__':
             img_e_c = img_e[0:h, int(0.25*w): int(0.75*w)]
             cv2.imwrite(new_img_path + filename, img_e_c)
 
-    if task == 'e2f_batch':
+    if args.task == 'e2f_batch':
         generated_path = args.input_folder
         generated_fisheye_path = args.output_folder
         filename_list = [a for a in os.listdir(generated_path) if a.endswith('.png')]
@@ -273,7 +261,7 @@ if __name__ == '__main__':
             img_r = imequ2fish(img, tkey=0, fov=180, roll=0, tilt=0, pan=0, w_ratio=2)
             cv2.imwrite(generated_fisheye_path + filename, img_r)
 
-    if task == 'e2f_global':
+    if args.task == 'e2f_global':
         img = cv2.imread(args.pano_img_path, -1)
         if len(img.shape) == 2:
             img = np.stack((img,) * 3, axis=-1)

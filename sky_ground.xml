@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.6.0">
+	<integrator type="path"/>
+	<sensor type="spherical">
+		<sampler type="ldsampler">
+			<integer name="sampleCount" value="256"/>
+		</sampler>
+		<film type="ldrfilm">
+			<integer name="width" value="512"/>
+			<integer name="height" value="256"/>
+			<boolean name="banner" value="false"/>
+			<rfilter type="gaussian" />
+		</film>
+	</sensor>
+
+	<shape type="obj">
+		<string name="filename" value="meshes/cbox_floor.obj"/>
+		<bsdf type="diffuse">
+			<spectrum name="albedo" value="0.2, 0.2, 0.2"/>
+		</bsdf>
+		<transform name="toWorld">
+			<scale value="100"/>
+			<translate x="-100" y="-0.01" z="-100"/>
+		</transform>
+	</shape>
+
+	<emitter type="sky">
+		<float name="turbidity" value="6"/>
+		<float name="latitude" value="40.458"/>
+		<float name="longitude" value="-79.934"/>
+		<float name="timezone" value="-4"/>
+
+		<spectrum name="albedo" value="0.2, 0.2, 0.2"/>
+
+		<integer name="year" value="2023"/>
+		<integer name="month" value="07"/>
+		<integer name="day" value="09"/>
+
+		<float name="hour" value="14"/>
+		<float name="minute" value="00"/>
+
+		<transform name="toWorld">
+			<rotate y="1" angle="0"/>
+		</transform>
+	</emitter>
+
+</scene>
