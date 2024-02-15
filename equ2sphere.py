@@ -211,10 +211,10 @@ def main():
     return args
 
 if __name__ == '__main__':
-
     args = main()
+
     """
-    00: import the files
+    00: convert single equrectanglar image into fisheye
     """
     if args.task == 'e2f':
         imgE = cv2.imread(args.single_img_path)
@@ -225,6 +225,10 @@ if __name__ == '__main__':
         img_r = imequ2fish(canvas, tkey = 0, fov=180, roll=0, tilt=0, pan=0, w_ratio = 2)
         cv2.imwrite('equ2fish.png', img_r)
 
+
+    """
+    01: convert single fisheye image into equrectanglar
+    """
     if args.task == 'f2e':
         img = cv2.imread(args.single_img_path, -1)
         img_e = imfish2equ(img, tkey = 0, fov=180, roll=0, tilt=0, pan=0, w_ratio = 2)
@@ -233,6 +237,9 @@ if __name__ == '__main__':
         cv2.imwrite('fish2equ.png', img_e_c)
 
 
+    """
+    02: convert batch fisheye image into equrectanglar
+    """
     if args.task == 'f2e_batch':
         ldr_set_path = args.input_folder
         new_img_path = args.output_folder
@@ -249,6 +256,10 @@ if __name__ == '__main__':
             img_e_c = img_e[0:h, int(0.25*w): int(0.75*w)]
             cv2.imwrite(new_img_path + filename, img_e_c)
 
+
+    """
+    03: convert single equrectanglar image into fisheye
+    """
     if args.task == 'e2f_batch':
         generated_path = args.input_folder
         generated_fisheye_path = args.output_folder
@@ -261,6 +272,10 @@ if __name__ == '__main__':
             img_r = imequ2fish(img, tkey=0, fov=180, roll=0, tilt=0, pan=0, w_ratio=2)
             cv2.imwrite(generated_fisheye_path + filename, img_r)
 
+
+    """
+    04: convert single equrectanglar image into 360 fisheye
+    """
     if args.task == 'e2f_global':
         img = cv2.imread(args.pano_img_path, -1)
         if len(img.shape) == 2:

@@ -66,10 +66,8 @@ if __name__ == '__main__':
     orig_hdr = cv.imread(input_hdr, -1)
     orig_hdr = Resize(orig_hdr, 3600, 3600)
     h, w = orig_hdr.shape[:2]
-    print('orig_hdr shape:', h, w)
     sun_mask = cv.imread(sun_mask_path, 0)
     sun_mask = Resize(sun_mask, h, w)
-    print('Resized sun_mask: ', sun_mask.shape[:2])
 
 
     """

@@ -19,10 +19,12 @@ def Spher2Equ(theta, phi, building_orient):
     theta = (building_orient - theta) * np.pi / 180
     phi = phi * np.pi / 180
 
+    # get x, y, z in 3D coordinate based on theta and phi angles
     x = r * np.cos(phi) * np.sin(theta)
     y = r * np.sin(phi)
     z = r * np.cos(phi) * np.cos(theta)
 
+    # get theta and phi for the equirectangle representation
     x_theta = np.arctan(x/z)
     y_phi = np.arcsin(y/math.sqrt((x**2 + y**2 + z**2)))
     return x_theta, y_phi
@@ -36,7 +38,7 @@ def Square2Equrec(img):
 
 def Equ2Square(img):
     h, w = img.shape[:2]
-    squ_canvas = np.zeros((h, h, 3), dtype=np.uint8)
+    # squ_canvas = np.zeros((h, h, 3), dtype=np.uint8)
     squ_img = img[0:h, int(w * 0.25): int(w * 0.75)]
     return squ_img
 
@@ -67,6 +69,7 @@ def Seg_building(input_sky_area):
     seg_canvas = np.zeros((h, h))
     sky_region = cv.imread(input_sky_area, 0)
     sky_h, sky_w = sky_region.shape[:2]
+
     seg_canvas[0:sky_h, 0:sky_w] = sky_region
     seg_layer = seg_canvas.copy()
     seg_layer[seg_layer != 0] = 255
@@ -152,8 +155,6 @@ def main():
     parser.add_argument('--target_phi', type=float, default=31.76, help='target sun phi')
     parser.add_argument('--adj_ang', type=float, default=0, help='additonal adjust ang for theta')
 
-
-
     args = parser.parse_args()
     return args
 
@@ -162,10 +163,10 @@ def main():
 if __name__ == '__main__':
 
     args = main()
-    """
-    00- import the equirectangler image
-    """
 
+
+
+    # import the equirectangler image
     filename_list = [a for a in os.listdir(args.ldr_set_path)]
     filename_list.sort()
     for filename in filename_list:
@@ -174,6 +175,7 @@ if __name__ == '__main__':
         rect_img = Square2Equrec(rec_fisheye)
         scene_context = rect_img.copy()
 
+        #get img dimension
         h, w = rect_img.shape[:2]
         r = h//2
 
@@ -188,10 +190,12 @@ if __name__ == '__main__':
         """
         02: get sky patch and context layer
         """
+        #get lens mask due to light loss at the edge
         lens_mask = cv.imread('input/mask.png', 0)
         lens_mask = Square2Equrec_BW(lens_mask)
         lens_mask = Resize(lens_mask, w, h)
 
+        #read segmentation layer to seg img into sky and non-sky regions
         seg_layer = Read_Sky_Patch(args.input_sky_area)
         building_layer = Seg_building(args.input_sky_area)
         cv.imwrite('01_sky_layer.png', seg_layer)
@@ -204,6 +208,7 @@ if __name__ == '__main__':
         """
         03: compute the target sun position on image 
         """
+        #convert target theta and phi angled into x, y coordinates in the image
         x_theta_new, y_phi_new = Spher2Equ(args.target_theta, args.target_phi, building_orient)
         dx_new = w//2 - x_theta_new/(math.pi) * w//2
         dy_new = h//2 - y_phi_new/(math.pi/2) * h//2
@@ -222,21 +227,27 @@ if __name__ == '__main__':
         04: transfer sky appearance from full spectral sky image
         """
         if args.Sky_Color  == True:
+
+            #adjust orientation to the actual room orientation
             rendered_sky = Adj_Build_Orient(args.input_sky_path, args.current_theta, args.current_phi, building_orient)
             rendered_sky = Resize(rendered_sky, w, h)
 
+            # outline the sun in the rendered image
             outlined_rend = Draw_Cir(rendered_sky.copy(), (int(dx), int(dy)), radius=100, color=(0, 0, 255), thickness=50)
             outlined_rend = Draw_Cir(outlined_rend, (int(dx_new), int(dy_new)), radius=100, color=(255, 0, 0), thickness=50)
             cv.imwrite('01_outlined_rend_sky.png', outlined_rend)
 
+            # add color change to the target sky
             sky_patch = sky_patch/(rendered_sky*args.tone_alpha)
             targt_sky = Adj_Build_Orient(args.targt_sky_path, args.target_theta, args.target_phi, building_orient)
             targt_sky = Resize(targt_sky, w, h)
 
+            # outline the sun in the target image
             outlined_targ = Draw_Cir(targt_sky.copy(), (int(dx), int(dy)), radius=100, color=(0, 0, 255), thickness=50)
             outlined_targ = Draw_Cir(outlined_targ, (int(dx_new), int(dy_new)), radius=100, color=(255, 0, 0), thickness=50)
             cv.imwrite('01_outlined_targ_sky.png', outlined_targ)
 
+            # apply alpha to control intensity
             new_sky_patch = Transform_Equ(h_dis, w_dis, sky_patch)
             transformed_sky = new_sky_patch*(targt_sky*args.tone_alpha)
 
@@ -247,11 +258,14 @@ if __name__ == '__main__':
         05: transfer ground appearance from full spectral sky image
         """
         if args.Bld_Color == True:
+
+            # read the current ground color from the rendered image
             input_grd_color = cv.imread(args.input_sky_path, -1)
             input_grd_color = Resize(input_grd_color, w, h)
             input_grd_color = input_grd_color[h // 2:h, 0:w]
             input_grd_color = Resize(input_grd_color, w, h)
 
+            # read the target ground color from the rendered image
             targt_grd_color = cv.imread(args.targt_sky_path, -1)
             targt_grd_color = Resize(targt_grd_color, w, h)
             targt_grd_color = targt_grd_color[h // 2:h, 0:w]

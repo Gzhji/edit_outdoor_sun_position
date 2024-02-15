@@ -25,10 +25,12 @@ def Spher2Equ(theta, phi, building_orient):
     theta = (building_orient - theta) * np.pi / 180
     phi = phi * np.pi / 180
 
+    # get x, y, z in 3D coordinate based on theta and phi angles
     x = r * np.cos(phi) * np.sin(theta)
     y = r * np.sin(phi)
     z = r * np.cos(phi) * np.cos(theta)
 
+    # get theta and phi for the equirectangle representation
     x_theta = np.arctan(x/z)
     y_phi = np.arcsin(y/math.sqrt((x**2 + y**2 + z**2)))
 
@@ -111,7 +113,6 @@ if __name__ == '__main__':
     x_theta, y_phi = Spher2Equ(theta, phi, building_orient)
     dx = w // 2 - x_theta / (math.pi) * w // 2
     dy = h // 2 - y_phi / (math.pi / 2) * h // 2
-    # print('dx, dy:', dx, dy)
 
 
     """
@@ -129,6 +130,4 @@ if __name__ == '__main__':
     """
     canvas[int(dy)-center[0]//2:int(dy)+center[0]//2,
            int(dx)-center[1]//2:int(dx)+center[0]//2] = circle
-
-    # print('int(dx)-center[1]//2, int(dx)+center[0]//2:', int(dx)-center[1]//2, int(dx)+center[0]//2)
     cv.imwrite('sun2canvas.png', canvas)
